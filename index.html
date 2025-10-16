@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="images/Grow-A-Plant-logo.png" type="image/png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Our Right to Live — Human Rights Advocacy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      onValue,
+      serverTimestamp,
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDHxSfP1xt1u8FzwWh69ioPiR5L9dHvac",
+      authDomain: "growaplant-42952.firebaseapp.com",
+      projectId: "growaplant-42952",
+      storageBucket: "growaplant-42952.firebasestorage.app",
+      messagingSenderId: "431783641051",
+      appId: "1:431783641051:web:2171d7ee3a74736721b1fe",
+      measurementId: "G-YL6ZR84FWV",
+      databaseURL: "https://growaplant-42952-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Make globals accessible to script.js
+    window.db = db;
+    window.ref = ref;
+    window.push = push;
+    window.onValue = onValue;
+    window.serverTimestamp = serverTimestamp;
+  </script>
+  <script src="script.js" defer></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white text-slate-900">
+
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur sticky top-0 z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold bg-blue-600">
+          <img src="images/Grow-A-Plant-logo.png" alt="logo" class="w-10 h-10 object-contain"/>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold">Our Right to Live</h1>
+          <p class="text-xs text-slate-500">Empowering, educating, and bringing hope to the Filipino people</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navbar -->
+      <nav class="hidden md:flex gap-3 items-center">
+        <button onclick="showSection('home')" class="nav-btn px-3 py-2 rounded bg-blue-600 text-white">Home</button>
+        <button onclick="showSection('advocacy')" class="nav-btn px-3 py-2 rounded hover:bg-blue-100">Our Advocacy</button>
+        <button onclick="showSection('getinvolved')" class="nav-btn px-3 py-2 rounded hover:bg-blue-100">Get Involved</button>
+        <button onclick="showSection('resources')" class="nav-btn px-3 py-2 rounded hover:bg-blue-100">Resources</button>
+        <button onclick="showSection('contact')" class="nav-btn px-3 py-2 rounded hover:bg-blue-100">Contact</button>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button id="mobileMenuBtn" class="md:hidden text-2xl p-2 border rounded bg-blue-600 text-white">
+        ☰
+      </button>
+
+      <!-- Right side desktop -->
+      <div class="hidden md:flex items-center gap-2">
+        <input id="search" placeholder="Search resources..." class="px-3 py-2 rounded border" oninput="filterPlaceholder()" />
+        <select id="themeToggle" aria-label="Theme" class="px-3 py-2 border rounded bg-white">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+        <button onclick="showSection('contact')" class="px-3 py-2 rounded bg-blue-50 border hover:bg-blue-100">Partner</button>
+      </div>
+    </div>
+
+  <!-- Sidebar menu (mobile only) -->
+  <div id="mobileSidebar" class="fixed top-0 left-0 w-64 h-full bg-white dark-mode:bg-slate-800 shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 flex justify-between items-center border-b">
+      <h2 class="font-bold text-lg">Menu</h2>
+      <button id="closeSidebar" class="text-2xl">&times;</button>
+    </div>
+    <nav class="flex flex-col p-4 space-y-2" id="mobileSidebarWhole">
+      <button onclick="showSection('home');toggleSidebar()" class="nav-btn text-left px-3 py-2 rounded hover:bg-blue-100">Home</button>
+      <button onclick="showSection('advocacy');toggleSidebar()" class="nav-btn text-left px-3 py-2 rounded hover:bg-blue-100">Our Advocacy</button>
+      <button onclick="showSection('getinvolved');toggleSidebar()" class="nav-btn text-left px-3 py-2 rounded hover:bg-blue-100">Get Involved</button>
+      <button onclick="showSection('resources');toggleSidebar()" class="nav-btn text-left px-3 py-2 rounded hover:bg-blue-100">Resources</button>
+      <button onclick="showSection('contact');toggleSidebar()" class="nav-btn text-left px-3 py-2 rounded hover:bg-blue-100">Contact</button>
+        <div class="p-4 border-t">
+          <label for="mobileThemeToggle" class="block text-sm mb-1">Theme</label>
+          <select id="mobileThemeToggle" class="w-full px-3 py-2 rounded border text-black">
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+    </nav>
+  </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-4 space-y-8">
+    <!-- Home -->
+    <section id="home" class="grid md:grid-cols-2 gap-6 items-center mt-6">
+      <div class="space-y-4">
+        <h2 class="text-3xl font-extrabold text-slate-900">Our Right to Live</h2>
+        <p class="text-slate-700">A student-led campaign promoting transparency, accountability, and active citizenship to defend human rights and strengthen good governance in the Philippines. We align with SDG 16 (Peace, Justice and Strong Institutions) and SDG 17 (Partnerships for the Goals).</p>
+
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <li class="p-3 bg-white rounded shadow">Raise awareness about rights and accountability</li>
+          <li class="p-3 bg-white rounded shadow">Encourage active citizenship and civic participation</li>
+          <li class="p-3 bg-white rounded shadow">Build partnerships with schools and community groups</li>
+          <li class="p-3 bg-white rounded shadow">Collect feedback through polls & surveys</li>
+        </ul>
+
+        <div class="flex gap-3 mt-4">
+          <button onclick="showSection('advocacy')" class="px-4 py-2 rounded bg-blue-600 text-white">Learn more</button>
+          <button onclick="showSection('getinvolved')" class="px-4 py-2 rounded border">Get involved</button>
+        </div>
+
+        <div class="mt-6 bg-white p-4 rounded shadow">
+          <h3 class="font-bold">Why this matters</h3>
+          <p class="text-sm text-slate-600">When people unite to demand transparency and fairness, institutions become stronger and society benefits. Our campaign aims to inform, mobilize, and support communities in speaking up for justice.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="rounded overflow-hidden shadow-lg bg-white">
+          <img src="images/plant_header.png" alt="unity" class="w-full h-80 object-cover" />
+          <div class="p-4">
+            <h4 class="font-bold">Unity builds accountability</h4>
+            <p class="text-sm text-slate-600 mt-2">Stories, resources and tools to help you speak up and collaborate for change.</p>
+          </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <div class="p-3 bg-white rounded shadow">
+            <h5 class="font-semibold">Workshops & Talks</h5>
+            <p class="text-xs text-slate-600">Partner with barangays and schools</p>
+          </div>
+          <div class="p-3 bg-white rounded shadow">
+            <h5 class="font-semibold">Community Engagement</h5>
+            <p class="text-xs text-slate-600">Surveys, polls and dialogues</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Advocacy -->
+    <section id="advocacy" class="hidden">
+      <h2 class="text-2xl font-bold">Our Advocacy</h2>
+      <p class="text-slate-600">We focus on promoting transparency, accountability, and active citizenship to combat corruption and strengthen good governance. Through education, open dialogue, and community engagement we empower Filipinos to defend their rights and demand fairness.</p>
+
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <h4 class="font-semibold">Campaign Focus</h4>
+          <p class="mt-2 text-sm">Promote transparency and accountability in public projects, raise awareness about citizen rights, and encourage collective action to strengthen institutions and build trust.</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h4 class="font-semibold">SMART Objectives</h4>
+          <ol class="list-decimal mt-2 ml-5 text-sm">
+            <li>Educate students in selected schools about rights and accountability within 6 months.</li>
+            <li>Run 3 community dialogues and collect 500 survey responses by end of semester.</li>
+            <li>Establish partnerships with at least 3 local organizations in 4 months.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Get Involved (Poll + Survey + Volunteer) -->
+    <section id="getinvolved" class="hidden grid md:grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-2xl font-bold">Get Involved</h2>
+        <p class="text-slate-600">Take part by answering a quick poll, completing a short survey, or signing up to volunteer.</p>
+
+        <!-- Dashboard cards -->
+        <div class="mt-4 grid grid-cols-3 gap-3">
+          <div class="p-3 bg-white rounded shadow text-center">
+            <div class="text-sm text-slate-500">Poll: Yes</div>
+            <div id="pollYesCount" class="text-2xl font-bold mt-1">0</div>
+          </div>
+          <div class="p-3 bg-white rounded shadow text-center">
+            <div class="text-sm text-slate-500">Poll: No</div>
+            <div id="pollNoCount" class="text-2xl font-bold mt-1">0</div>
+          </div>
+          <div class="p-3 bg-white rounded shadow text-center">
+            <div class="text-sm text-slate-500">Surveys</div>
+            <div id="surveyCount" class="text-2xl font-bold mt-1">0</div>
+          </div>
+        </div>
+
+        <!-- Poll -->
+        <div class="mt-4 bg-white p-4 rounded shadow">
+          <h3 class="font-semibold">Quick poll</h3>
+          <p class="text-sm text-slate-600 mt-2">Do you think this advocacy is making a difference?</p>
+          <div class="mt-3 flex gap-3">
+            <button onclick="submitPollVote(true)" class="px-4 py-2 rounded bg-gold-500 text-white">Yes</button>
+            <button onclick="submitPollVote(false)" class="px-4 py-2 rounded border">No</button>
+          </div>
+          <div class="mt-3 text-xs text-slate-500">Results update in real-time.</div>
+        </div>
+
+        <!-- Volunteer signup -->
+        <div class="mt-4 bg-white p-4 rounded shadow">
+          <h3 class="font-semibold">Volunteer / Join the Campaign</h3>
+          <form id="volunteerForm" class="mt-3 space-y-2">
+            <input id="volName" placeholder="Your name" class="w-full px-3 py-2 border rounded" />
+            <input id="volContact" placeholder="Phone or email" class="w-full px-3 py-2 border rounded" />
+            <div class="flex gap-2">
+              <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white">Sign up</button>
+              <button type="button" onclick="document.getElementById('volunteerForm').reset()" class="px-4 py-2 rounded border">Reset</button>
+            </div>
+            <div id="volMessage" class="text-sm text-green-600 hidden mt-2">Thanks — we will contact you soon.</div>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <!-- Survey -->
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold">Short impact survey</h3>
+          <p class="text-sm text-slate-600 mt-2">Please answer a few short questions to help us measure impact.</p>
+
+          <form id="surveyForm" class="mt-3 space-y-3">
+            <label class="block text-sm">1) After seeing our materials, do you feel more informed about your rights?
+              <select id="q1" class="w-full mt-1 px-3 py-2 border rounded">
+                <option value="">-- choose --</option>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Somewhat</option>
+              </select>
+            </label>
+
+            <label class="block text-sm">2) Do you feel empowered to speak up about corruption or rights violations?
+              <select id="q2" class="w-full mt-1 px-3 py-2 border rounded">
+                <option value="">-- choose --</option>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Maybe</option>
+              </select>
+            </label>
+
+            <label class="block text-sm">3) What is the most important issue we should focus on? (short answer)
+              <input id="q3" class="w-full mt-1 px-3 py-2 border rounded" />
+            </label>
+
+            <label class="block text-sm">4) Any suggestions? (optional)
+              <textarea id="q4" rows="3" class="w-full mt-1 px-3 py-2 border rounded"></textarea>
+            </label>
+
+            <div class="flex gap-2">
+              <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white">Submit survey</button>
+              <button type="button" onclick="document.getElementById('surveyForm').reset()" class="px-4 py-2 rounded border">Reset</button>
+            </div>
+            <div id="surveyMessage" class="text-sm text-green-600 hidden mt-2">Thank you — your response was recorded.</div>
+          </form>
+        </div>
+
+        <div class="mt-4 bg-white p-4 rounded shadow">
+          <h4 class="font-semibold">How responses help</h4>
+          <p class="text-sm text-slate-600 mt-2">Survey data helps us plan workshops, outreach, and improve our campaign materials. We will use aggregate, non-personalized results to guide actions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources -->
+    <section id="resources" class="hidden">
+      <h2 class="text-2xl font-bold">Resources & Partners</h2>
+      <div class="mt-4 grid sm:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <h4 class="font-semibold">Official sources</h4>
+          <ul class="text-sm mt-2 space-y-1">
+            <li>United Nations — Human rights & SDG 16 resources</li>
+            <li>Commission on Human Rights (Philippines) — chr.gov.ph</li>
+            <li>The Global Goals — Goal 17: Partnerships</li>
+          </ul>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h4 class="font-semibold">Local partners</h4>
+          <ul class="text-sm mt-2 space-y-1">
+            <li>Student councils and school organizations</li>
+            <li>Local NGOs and barangay councils</li>
+            <li>Church groups and labor unions</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="hidden bg-white p-4 rounded shadow">
+      <h2 class="text-2xl font-bold">Contact & Partnership</h2>
+      <p class="text-slate-600">Partner with us, request talks, or give feedback.</p>
+
+      <form onsubmit="event.preventDefault(); alert('Thanks — contact submitted!')" class="mt-4 grid gap-3 max-w-lg">
+        <input placeholder="Your name" class="px-3 py-2 border rounded" />
+        <input placeholder="Email (optional)" class="px-3 py-2 border rounded" />
+        <textarea placeholder="Message" class="px-3 py-2 border rounded" rows="4"></textarea>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 rounded bg-blue-600 text-white">Send</button>
+          <button type="button" onclick="showSection('home')" class="px-4 py-2 rounded border">Back</button>
+        </div>
+      </form>
+
+      <div class="mt-4">
+        <img src="images/Grow-A-Plant-logo.png" alt="logo" width="200" height="200">
+      </div>
+    </section>
+
+    <!-- Thanks -->
+    <section id="thanks" class="hidden bg-white p-6 rounded shadow text-center">
+      <h2 class="text-2xl font-bold">Thank you for supporting our advocacy!</h2>
+      <p class="text-slate-600 mt-2">Share this campaign with your friends and classmates.</p>
+      <div class="mt-4">
+        <button onclick="showSection('home')" class="px-4 py-2 rounded bg-blue-600 text-white">Return home</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-12 bg-gray-50 border-t">
+    <div class="max-w-6xl mx-auto p-4 flex flex-col md:flex-row items-center justify-between">
+      <div class="text-sm text-slate-600">© 2025 Our Right to Live — Student Advocacy Project</div>
+      <div class="flex gap-3 mt-3 md:mt-0">
+        <a href="#" onclick="showSection('resources')" class="text-sm underline">Partners</a>
+        <a href="#" onclick="showSection('contact')" class="text-sm underline">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
