@@ -1,33 +1,4 @@
-/* ===== Theme Colors: Blue + Gold (accent) ===== */
-:root{
-  --blue-600: #1e40af;
-  --blue-50: #eff6ff;
-  --gold-500: #d97706;
-  --muted: #6b7280;
-  --bg: linear-gradient(to bottom, #f0f7ff, #ffffff);
-}
-
-/* Base background */
-body {
-  background: var(--bg);
-  color: #0f172a;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-
-/* Header logo circle override */
-header .w-12.h-12 { background: var(--blue-600); }
-
-/* Buttons */
-button {
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-button:hover { transform: translateY(-2px); }
-
-/* Gold accent */
-.bg-gold-500 { background-color: var(--gold-500); }
-.text-gold-500 { color: var(--gold-500); }
-
-/* Upload label (if any left) */
+/* ===== Upload Styles ===== */
 #plantImageInput {
   position: absolute;
   opacity: 0;
@@ -35,9 +6,10 @@ button:hover { transform: translateY(-2px); }
   height: 1px;
   left: -9999px;
 }
+
 .upload-label {
   display: inline-block;
-  background-color: var(--blue-600);
+  background-color: #2563eb; /* blue */
   color: white;
   font-weight: 600;
   padding: 0.5rem 1rem;
@@ -45,63 +17,160 @@ button:hover { transform: translateY(-2px); }
   cursor: pointer;
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
-.upload-label:hover { transform: translateY(-2px); }
+.upload-label:hover {
+  transform: translateY(-2px);
+  background-color: #1d4ed8; /* darker blue */
+}
 
-/* Smooth transition */
-body, .dark-mode, body * {
+#plantImagePreview p {
+  font-style: italic;
+  color: #4b5563;
+}
+
+/* ===== Smooth Transition ===== */
+body,
+.dark-mode,
+body * {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-/* Dark mode tweaks */
-.dark-mode {
-  background: #071032 !important;
-  color: #e6eef8 !important;
+/* ===== Base Light Mode ===== */
+body {
+  background: linear-gradient(to bottom, #eff6ff, #ffffff);
+  color: #111827;
 }
 
-/* Header (dark) */
+/* ===== Dark Mode ===== */
+.dark-mode {
+  background: #0f172a !important;
+  color: #ffffff !important; /* make all text white */
+}
+
+/* Header */
 .dark-mode header {
-  background-color: rgba(4, 6, 23, 0.8) !important;
+  background-color: rgba(30, 41, 59, 0.8) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(90, 100, 130, 0.3);
-}
-
-/* Card adjustments */
-.dark-mode .bg-white,
-.dark-mode .shadow,
-.dark-mode section,
-.dark-mode main {
-  background-color: #071232 !important;
-  color: #e6eef8 !important;
-  border-color: #0b294b !important;
-}
-
-/* Text */
-.text-slate-600 { color: #475569; }
-.text-slate-700 { color: #334155; }
-
-/* Inputs */
-input, select, textarea {
-  outline: none;
-  border: 1px solid #e6edf8;
-  background: white;
-  color: #0f172a;
-}
-.dark-mode input, .dark-mode textarea, .dark-mode select {
-  background: #071232;
-  color: #e6eef8;
-  border: 1px solid #12314f;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+  color: #ffffff !important;
 }
 
 /* Footer */
-footer { background: rgba(245,247,255,0.7); }
+.dark-mode footer {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
 
-/* Small utilities */
-.hidden { display: none !important; }
+/* Cards, Sections, and Boxes */
+.dark-mode .bg-white,
+.dark-mode section.bg-white,
+.dark-mode .shadow,
+.dark-mode section,
+.dark-mode main {
+  background-color: #1e293b !important;
+  color: #ffffff !important; /* text inside cards white */
+  border-color: #334155 !important;
+}
+
+/* Card Hover */
+.dark-mode .bg-white:hover {
+  background-color: #2d3a4d !important;
+  color: #ffffff !important;
+}
+
+/* Text Colors */
+.dark-mode .text-gray-600,
+.dark-mode .text-gray-700,
+.dark-mode .text-gray-800,
+.dark-mode .text-slate-500,
+.dark-mode .text-slate-600,
+.dark-mode .text-slate-700,
+.dark-mode .text-slate-900 {
+  color: #ffffff !important;
+}
+
+/* Inputs, Dropdowns, Textareas */
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Buttons */
+.dark-mode button {
+  border: 1px solid #2563eb !important;
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+.dark-mode .nav-btn {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+.dark-mode .nav-btn.bg-green-600 {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* Links */
+.dark-mode a {
+  color: #93c5fd !important;
+}
+.dark-mode a:hover {
+  color: #bfdbfe !important;
+}
+
+/* Sidebar/Boxes Shadow Feel */
+.dark-mode .shadow {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Pledge boxes and image previews */
+.dark-mode #plantImagePreview p {
+  color: #ffffff !important;
+}
 
 /* Selection highlight */
-::selection { background: #ffdca8; color: #071032; }
+.dark-mode ::selection {
+  background: #2563eb;
+  color: #ffffff;
+}
 
-/* Mobile sidebar */
-#mobileSidebar { background-color: white; }
-.dark-mode #mobileSidebar { background-color: #071232 !important; color: #e6eef8 !important; }
+/* ===== Mobile Sidebar ===== */
+#mobileSidebar {
+  background-color: white;
+}
+
+#mobileSidebarWhole {
+  background-color: white;
+}
+
+.dark-mode #mobileSidebar {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+.dark-mode #mobileSidebarWhole {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+.dark-mode #closeSidebar {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border: #1e293b;
+}
+
+#mobileSidebar button {
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+  color: #ffffff !important;
+}
+
+.dark-mode #mobileThemeToggle {
+  background-color: #1e293b;
+  color: #ffffff !important;
+  border: 1px solid #334155;
+}
