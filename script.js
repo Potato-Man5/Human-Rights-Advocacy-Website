@@ -68,20 +68,45 @@ function toggleSidebar(open = null) {
 }
 
 // --- Firebase interactions (poll, survey, volunteers) ---
-function submitPollVote(isYes) {
+async function getIP() {
+  const res = await fetch("https://api.ipify.org?format=json");
+  const data = await res.json();
+  return data.ip;
+}
+
+async function submitPollVote(isYes) {
   try {
-    const votesRef = window.ref(db, "pollVotes");
-    window.push(votesRef, {
+    const ip = await getIP();
+    const ipKey = encodeURIComponent(ip.replace(/\./g, "_"));
+    const ipRef = window.ref(db, "ipVotes/" + ipKey);
+
+    const snapshot = await window.get(ipRef);
+    if (snapshot.exists()) {
+      alert("This network/IP has already voted!");
+      return;
+    }
+
+    // ✅ Save IP vote to prevent duplicates
+    await window.set(ipRef, {
       vote: isYes ? "yes" : "no",
-      ts: window.serverTimestamp()
+      ts: window.serverTimestamp(),
     });
-    // simple feedback
-    alert("Thanks — your vote was recorded.");
+
+    // ✅ Also push a poll vote entry so counters work
+    const pollRef = window.ref(db, "pollVotes");
+    await window.push(pollRef, {
+      vote: isYes ? "yes" : "no",
+      ts: window.serverTimestamp(),
+    });
+
+    alert("✅ Thanks — your vote was recorded!");
   } catch (e) {
-    console.error("Error submitting poll vote:", e);
+    console.error("Error submitting vote:", e);
     alert("Failed to submit vote. Try again.");
   }
 }
+
+
 
 function startRealtimePoll() {
   const votesRef = window.ref(db, "pollVotes");

@@ -15,6 +15,8 @@
       push,
       onValue,
       serverTimestamp,
+      get,
+      set,
     } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
     const firebaseConfig = {
@@ -37,6 +39,9 @@
     window.push = push;
     window.onValue = onValue;
     window.serverTimestamp = serverTimestamp;
+    window.get = get;
+    window.set = set;
+
   </script>
   <script src="script.js" defer></script>
 </head>
@@ -224,7 +229,7 @@
           <h3 class="font-semibold">Quick poll</h3>
           <p class="text-sm text-slate-600 mt-2">Do you think this advocacy is making a difference?</p>
           <div class="mt-3 flex gap-3">
-            <button onclick="submitPollVote(true)" class="px-4 py-2 rounded bg-gold-500 text-white">Yes</button>
+            <button onclick="submitPollVote(true)" class="px-4 py-2 rounded border">Yes</button>
             <button onclick="submitPollVote(false)" class="px-4 py-2 rounded border">No</button>
           </div>
           <div class="mt-3 text-xs text-slate-500">Results update in real-time.</div>
