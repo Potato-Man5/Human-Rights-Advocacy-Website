@@ -93,7 +93,7 @@ async function submitPollVote(isYes) {
     });
 
     // Also push a poll vote entry so counters work
-    const pollRef = window.ref(db, "pollVotes");
+    const pollRef = window.ref(db, "ipVotes");
     await window.push(pollRef, {
       vote: isYes ? "yes" : "no",
       ts: window.serverTimestamp(),
@@ -109,7 +109,7 @@ async function submitPollVote(isYes) {
 
 
 function startRealtimePoll() {
-  const votesRef = window.ref(db, "pollVotes");
+  const votesRef = window.ref(db, "ipVotes");
   window.onValue(votesRef, (snapshot) => {
     const data = snapshot.val() || {};
     const votes = Object.values(data);
