@@ -86,20 +86,20 @@ async function submitPollVote(isYes) {
       return;
     }
 
-    // ✅ Save IP vote to prevent duplicates
+    // Save IP vote to prevent duplicates
     await window.set(ipRef, {
       vote: isYes ? "yes" : "no",
       ts: window.serverTimestamp(),
     });
 
-    // ✅ Also push a poll vote entry so counters work
+    // Also push a poll vote entry so counters work
     const pollRef = window.ref(db, "pollVotes");
     await window.push(pollRef, {
       vote: isYes ? "yes" : "no",
       ts: window.serverTimestamp(),
     });
 
-    alert("✅ Thanks — your vote was recorded!");
+    alert("Thanks — your vote was recorded!");
   } catch (e) {
     console.error("Error submitting vote:", e);
     alert("Failed to submit vote. Try again.");
